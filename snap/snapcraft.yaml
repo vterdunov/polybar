@@ -1,0 +1,85 @@
+name: polybar
+version: latest
+version-script: git describe --tags --always --long
+summary: A fast and easy-to-use status bar
+description: |
+  Polybar aims to help users build beautiful and highly customizable status bars for
+  their desktop environment, without the need of having a black belt in shell scripting.
+  Built with modules:
+    - alsa
+    - curl
+    - i3
+    - mpd
+    - network
+
+grade: stable
+confinement: classic
+
+apps:
+  polybar:
+    command: bin/polybar
+
+parts:
+  xcb-util-xrm:
+    source: https://github.com/Airblader/xcb-util-xrm.git
+    source-type: git
+    source-tag: v1.2
+    plugin: autotools
+    build-packages:
+      - xutils-dev
+
+  polybar:
+    plugin: cmake
+    source: .
+    source-type: git
+    configflags:
+      - -DENABLE_ALSA=ON
+      - -DENABLE_I3=ON
+      - -DENABLE_MPD=ON
+      - -DENABLE_NETWORK=ON
+      - -DBUILD_IPC_MSG=ON
+    build-packages:
+      - libcairo2-dev
+      - libxcb1-dev
+      - python
+      - libxcb-dpms0-dev
+      - libxcb-image0-dev
+      - libxcb-util0-dev
+      - libev-dev
+      - libxcb-xinerama0-dev
+      - libxcb-xkb-dev
+      - libxcb-randr0-dev
+      - libxkbcommon-x11-dev
+      - libxkbcommon-dev
+      - xcb-proto
+      - libxcb-ewmh-dev
+      - libxcb-icccm4-dev
+      - python-xcbgen
+      - i3-wm
+      - libdssialsacompat-dev
+      - libdssialsacompat0
+      - libmpdclient-dev
+      - libcurl4-openssl-dev
+      - libiw-dev
+      - libalsa-ocaml
+      - libalsa-ocaml-dev
+    stage-packages:
+      - libiw30
+      - libx11-6
+      - libxext6
+      - libxrender1
+      - libasound2
+      - libcairo2
+      - libcurl3
+      - libfontconfig1
+      - libpixman-1-0
+      - librtmp1
+      - libxcb-icccm4
+      - libxcb-randr0
+      - libxcb-render0
+      - libxcb-shm0
+      - libxcb-xkb1
+      - libxcb-ewmh2
+      - libmpdclient2
+    after:
+      - xcb-util-xrm
